@@ -3,23 +3,28 @@ from drafts_i.config import NOTES_DIR, DB_PATH
 
 
 def main():
+    # no command no argument
     if len(sys.argv) < 2:
         from drafts_i.query import query
 
         query()
         return
-
-    cmd = sys.argv[1]
-
-    if cmd == "ingest":
-        from drafts_i.ingest import ingest_all
-
-        ingest_all(NOTES_DIR, DB_PATH)
-
-    elif cmd == "ask":
-        from drafts_i.query import query
-
-        query()
-
+    # command + argument
     else:
-        print(f"Unknown command: {cmd}")
+        cmd = sys.argv[1]
+        if cmd == "ask":
+            from drafts_i.query import query
+
+            query()
+
+        elif cmd == "ingest":
+            from drafts_i.ingest import ingest_all
+
+            path_to_ingest = NOTES_DIR
+            if len(sys.argv) > 2:
+                path_to_ingest = sys.argv[2]
+
+            ingest_all(path_to_ingest, DB_PATH)
+
+        else:
+            print(f"Unknown command: {cmd}")
