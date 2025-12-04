@@ -106,6 +106,7 @@ def query():
 
     # print("Loading embedding model...")
     from sentence_transformers import SentenceTransformer
+
     embedder = SentenceTransformer(EMBED_MODEL_NAME)
 
     # print("Embedding query...")
@@ -132,4 +133,30 @@ def query():
     answer = ask_llama_cli(context, question)
 
     # print("\n=== FINAL ANSWER ===")
+    print(answer)
+
+
+def ask(question: str):
+    if not question:
+        print("Empty question.")
+        return
+
+    from sentence_transformers import SentenceTransformer
+
+    embedder = SentenceTransformer(EMBED_MODEL_NAME)
+
+    q_vec = embed_query(embedder, question)
+
+    conn = open_conn()
+
+    hits = ann_search(conn, q_vec, TOP_K)
+
+    if not hits:
+        print("No results.")
+        return
+
+    context = build_context(hits)
+
+    answer = ask_llama_cli(context, question)
+
     print(answer)

@@ -13,7 +13,7 @@ EMBED_MODEL_NAME = "thenlper/gte-small"
 TOP_K = 5
 MAX_CONTEXT = 8000
 
-LLAMA_CLI_PATH = "llama-cli"
+LLAMA_CLI_PATH = "/mnt/repos/llama.cpp/build/bin/llama-cli"
 LLAMA_MODEL_PATH = "/mnt/extra/models/gguf/qwen/Qwen2.5-3B-Instruct-Q4_K_M-GGUF/qwen2.5-3b-instruct-q4_k_m.gguf"
 LLAMA_CTX = "8192"
 # -----------------------------------------------------------------------------

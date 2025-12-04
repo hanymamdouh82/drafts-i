@@ -13,9 +13,11 @@ def main():
     else:
         cmd = sys.argv[1]
         if cmd == "ask":
-            from drafts_i.query import query
+            question = " ".join(sys.argv[2:])
+            from drafts_i.query import ask
 
-            query()
+            ask(question)
+            return
 
         elif cmd == "ingest":
             from drafts_i.ingest import ingest_all
