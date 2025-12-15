@@ -70,7 +70,7 @@ def query(question: str, isLong=False):
 
     q_vec = next(embedder.embed(question, normalize_embeddings=True))
 
-    results = qClient.query_points(collection_name=COLLECTION_NAME, query=q_vec.tolist(), limit=10)
+    results = qClient.query_points(collection_name=COLLECTION_NAME, query=q_vec.tolist(), limit=15, score_threshold=0.7)
 
     if not results:
         print("No results.")

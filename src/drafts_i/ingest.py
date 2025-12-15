@@ -92,6 +92,7 @@ def ingest_all():
                     vector=v,
                     payload={
                         "filename": fp,
+                        "lastmodified": mtime,
                         "chunk": chunks[i],
                     },
                 )
