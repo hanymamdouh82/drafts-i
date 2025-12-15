@@ -4,20 +4,19 @@
 
 Drafts-I is a high-performance, fully offline RAG (Retrieval-Augmented Generation) system that turns your Markdown notes into a searchable semantic knowledge base.
 
-It embeds your notes using SentenceTransformer models, indexes them via **SQLite-vec**, performs fast ANN (approximate nearest-neighbor) retrieval, and feeds the relevant context to a **local LLM** powered by `llama-cli`.  
+It embeds your notes using SentenceTransformer models, indexes them via **Qdrant**, performs fast ANN (approximate nearest-neighbor) retrieval, and feeds the relevant context to a **local LLM** powered by `llama-cli`.  
 Everything runs locally, with zero external calls.
 
 ---
 
 ## 🚀 Features
 
-- **Fast semantic search** using SQLite-vec ANN indexing
+- **Fast semantic search** using Qdrant ANN indexing
 - **Offline embeddings** with SentenceTransformer (`gte-small` by default)
 - **Local LLM answers** using `llama-cli` (Qwen2.5 recommended)
 - **Markdown ingestion pipeline** with incremental updates
 - **Supports hundreds of files / thousands of chunks**
 - **Clean, deterministic output** with optimized llama-cli flags
-- **Portable**: single database file (`notes.db`) + your local LLM model
 
 ---
 
@@ -29,11 +28,10 @@ Drafts-I consists of three major components:
    - Recursively scans a directory of Markdown files
    - Splits documents into semantic chunks
    - Generates embeddings for each chunk
-   - Stores chunks and vectors inside `notes.db` using SQLite-vec
+   - Stores chunks and vectors inside `Qdrant` 
 
 2. **Semantic Retrieval Engine**
    - Converts the user query to an embedding
-   - Performs fast KNN search using SQLite-vec
    - Retrieves the top-K most relevant chunks
 
 3. **LLM Answering Layer**
@@ -56,7 +54,6 @@ drafts-i/
 │ ├── config.py # Paths + settings
 │ └── ...
 │
-├── notes.db # SQLite-vec database (auto-generated)
 ├── pyproject.toml
 └── README.md
 
@@ -68,7 +65,7 @@ drafts-i/
 
 - Python 3.10+
 - [uv](https://github.com/astral-sh/uv)
-- `sqlite3` with SQLite-vec extension
+- `Qdrant` server (can be Docker container for portability)
 - GPU optional (recommended for larger LLM models)
 - Local LLM model in GGUF format (e.g., _Qwen2.5-3B-Instruct-Q4_K_M_)
 
@@ -79,7 +76,7 @@ drafts-i/
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourname/drafts-i.git
+git clone https://github.com/hanymamdouh82/drafts-i.git
 cd drafts-i
 uv sync
 ```
@@ -99,7 +96,7 @@ This will:
 - scan all `.md` files
 - chunk them
 - embed them
-- insert vectors into SQLite-vec
+- insert vectors into Qdrant
 
 Re-running it will update only changed files based on modification time.
 
@@ -131,9 +128,7 @@ You’ll get a clean, contextual answer from your notes powered by your local LL
 
 ## ⚡ Performance Notes
 
-- SQLite operates in WAL mode for faster reads
-- ANN search typically returns results in **1–3 ms**
-- Model loading occurs only once per invocation
+- Vectors strored in Qdrant for fast cosine similarty search
 - llama-cli flags are tuned for deterministic, clean output
 
 ---
@@ -160,12 +155,12 @@ Recommended alternatives:
 
 Edit `LLAMA_MODEL_PATH` in `config.py`.
 
-Works great with:
+Models Tested:
 
-- Qwen2.5
+- Qwen2.5 (Best one)
 - Phi-3 GGUF
 - Llama-3-Instruct
-- Mistral
+- Mistral (requires high CPU and GPU)
 
 ---
 
